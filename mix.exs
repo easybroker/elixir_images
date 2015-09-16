@@ -14,7 +14,10 @@ defmodule Images.Mixfile do
   #
   # Type `mix help compile.app` for more information
   def application do
-    [applications: [:logger, :mariaex, :ecto]]
+    [
+      mod: {Images, []},
+      applications: [:logger, :mariaex, :ecto]
+    ]
   end
 
   # Dependencies can be Hex packages:
