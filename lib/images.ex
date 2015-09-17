@@ -12,6 +12,6 @@ defmodule Images do
   end
 
   def run do
-    Enum.each Images.PropertyImage.all, fn(i) -> IO.puts i.file end
+    Enum.each Images.PropertyImage.all, fn(i) -> Images.PropertyImage.process i end
   end
 end
