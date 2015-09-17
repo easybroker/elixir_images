@@ -3,7 +3,7 @@ defmodule Images do
     import Supervisor.Spec
 
     children = [
-      worker(Repo, [])
+      worker(Images.Repo, [])
     ]
 
     opts = [strategy: :one_for_one, name: Images.Supervisor]

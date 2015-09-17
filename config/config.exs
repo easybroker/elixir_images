@@ -2,7 +2,7 @@
 # and its dependencies with the aid of the Mix.Config module.
 use Mix.Config
 
-config :images, Repo,
+config :images, Images.Repo,
   adapter: Ecto.Adapters.MySQL,
   database: "easyaviso_development",
   username: "root",
