@@ -4,7 +4,7 @@ use Mix.Config
 
 config :images, Images.Repo,
   adapter: Ecto.Adapters.MySQL,
-  database: "easyaviso_development",
+  database: "easyaviso_staging",
   username: "root",
   password: "",
   hostname: "localhost"

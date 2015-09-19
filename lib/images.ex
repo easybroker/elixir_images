@@ -4,14 +4,16 @@ defmodule Images do
 
     children = [
       worker(Images.Repo, []),
-      worker(Task, [fn -> Images.run end])
+      supervisor(Task.Supervisor, [[name: Images.TaskSupervisor]])
     ]
 
-    opts = [strategy: :one_for_one, name: Images.Supervisor]
-    Supervisor.start_link(children, opts)
+    opts = [strategy: :one_for_one]
+    supervisor = Supervisor.start_link(children, opts)
+    run
+    supervisor
   end
 
   def run do
-    Enum.each Images.PropertyImage.all, fn(i) -> Images.PropertyImage.process i end
+    Enum.each Images.PropertyImage.all, fn(i) -> Task.Supervisor.start_child(Images.TaskSupervisor, fn -> Images.PropertyImage.process i end) end
   end
 end
