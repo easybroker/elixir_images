@@ -18,10 +18,16 @@ defmodule Images.PropertyImage do
   end
 
   def process(image) do
-    s3_url(image) |> IO.puts
+    image.file |> s3_url(image.id) |> IO.puts
+    image.file |> size_name(:medium) |> s3_url(image.id) |> IO.puts
+    image.file |> size_name(:thumb) |> s3_url(image.id) |> IO.puts
   end
 
-  def s3_url(image) do
-    ~s(https://s3.amazonaws.com/assets.stagingea.com/uploads/property_image/file/#{image.id}/#{image.file})
+  def s3_url(file, id) do
+    ~s(https://s3.amazonaws.com/assets.stagingea.com/uploads/property_image/file/#{id}/#{file})
+  end
+
+  def size_name(name, size) do
+    ~s(#{size}_#{name})
   end
 end
