@@ -20,10 +20,7 @@ defmodule Images.PropertyImage do
   end
 
   def process(image) do
-    #image.file |> s3_url(image.id) |> IO.puts
-    medium = image.file |> size_name(:medium) |> s3_url(image.id)
-    #thumb  =image.file |> size_name(:thumb) |> s3_url(image.id)
-
+    medium   = image.file |> size_name(:medium) |> s3_url(image.id)
     response = medium |> HTTPotion.head
 
     unless response.status_code == 200 do
@@ -44,8 +41,9 @@ defmodule Images.PropertyImage do
   end
 
   def generate_versions(filename, id) do
-    file = download_original(filename, id)
+    file        = download_original(filename, id)
     medium_file = generate_medium(file, filename)
+    thumb_file  = generate_thumb(file, filename)
   end
 
   def download_original(filename, id) do
@@ -62,9 +60,18 @@ defmodule Images.PropertyImage do
   def generate_medium(file, filename) do
     result = Path.join(System.tmp_dir, size_name(filename, :medium))
     Mogrify.open(file)
-    |> Mogrify.copy
-    |> Mogrify.resize_to_fill("450x300")
-    |> Mogrify.save(result)
+      |> Mogrify.copy
+      |> Mogrify.resize_to_fill("450x300")
+      |> Mogrify.save(result)
+    result
+  end
+
+  def generate_thumb(file, filename) do
+    result = Path.join(System.tmp_dir, size_name(filename, :medium))
+    Mogrify.open(file)
+      |> Mogrify.copy
+      |> Mogrify.resize_to_limit("200x200")
+      |> Mogrify.save(result)
     result
   end
 end
