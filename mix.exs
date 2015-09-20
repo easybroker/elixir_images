@@ -34,7 +34,8 @@ defmodule Images.Mixfile do
       {:ecto, "~> 1.0"},
       {:mariaex, "~> 0.4.2"},
       {:ibrowse, github: "cmullaparthi/ibrowse", tag: "v4.1.2"},
-      {:httpotion, "~> 2.1.0"}
+      {:httpotion, "~> 2.1.0"},
+      {:mogrify, github: "dabit/mogrify", tag: "resize"}
     ]
   end
 end
