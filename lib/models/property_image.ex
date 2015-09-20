@@ -1,5 +1,3 @@
-require IEx
-
 defmodule Images.PropertyImage do
   use Ecto.Model
 
@@ -12,7 +10,7 @@ defmodule Images.PropertyImage do
   def main_query do
     from i in Images.PropertyImage,
       select: i,
-      limit: 10
+      limit: 200
   end
 
   def all do
@@ -24,7 +22,9 @@ defmodule Images.PropertyImage do
     response = medium |> HTTPotion.head
 
     unless response.status_code == 200 do
+      IO.puts "#{image.id} - #{image.file} Start"
       generate_versions(image.file, image.id)
+      IO.puts "#{image.id} - #{image.file} End"
     end
   end
 
