@@ -16,7 +16,7 @@ defmodule Images.Mixfile do
   def application do
     [
       mod: {Images, []},
-      applications: [:logger, :mariaex, :ecto]
+      applications: [:logger, :mariaex, :ecto, :httpotion]
     ]
   end
 
@@ -32,7 +32,9 @@ defmodule Images.Mixfile do
   defp deps do
     [
       {:ecto, "~> 1.0"},
-      {:mariaex, "~> 0.4.2"}
+      {:mariaex, "~> 0.4.2"},
+      {:ibrowse, github: "cmullaparthi/ibrowse", tag: "v4.1.2"},
+      {:httpotion, "~> 2.1.0"}
     ]
   end
 end

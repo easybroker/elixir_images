@@ -18,9 +18,16 @@ defmodule Images.PropertyImage do
   end
 
   def process(image) do
-    image.file |> s3_url(image.id) |> IO.puts
-    image.file |> size_name(:medium) |> s3_url(image.id) |> IO.puts
-    image.file |> size_name(:thumb) |> s3_url(image.id) |> IO.puts
+    #image.file |> s3_url(image.id) |> IO.puts
+    medium = image.file |> size_name(:medium) |> s3_url(image.id)
+    #thumb  =image.file |> size_name(:thumb) |> s3_url(image.id)
+
+    response = medium |> HTTPotion.get
+
+    unless response.status_code == 200 do
+      IO.puts response.status_code
+      IO.puts medium
+    end
   end
 
   def s3_url(file, id) do
