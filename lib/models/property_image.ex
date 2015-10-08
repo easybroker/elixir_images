@@ -42,14 +42,14 @@ defmodule Images.PropertyImage do
 
   def generate_versions(filename, id) do
     file        = download_original(filename, id)
-    medium_file = generate_medium(file, filename)
-    thumb_file  = generate_thumb(file, filename)
+    generate_medium(file, filename, id)
+    generate_thumb(file, filename, id)
   end
 
   def download_original(filename, id) do
     file     = temp_filename(filename, id)
     ibrowse  = [save_response_to_file: String.to_char_list(file)]
-    response = s3_url(filename, id) |> HTTPotion.get([ibrowse: ibrowse])
+    s3_url(filename, id) |> HTTPotion.get([ibrowse: ibrowse])
     file
   end
 
@@ -57,8 +57,10 @@ defmodule Images.PropertyImage do
     Path.join(System.tmp_dir, "#{Integer.to_string(id)}#{filename}")
   end
 
-  def generate_medium(file, filename) do
-    result = Path.join(System.tmp_dir, size_name(filename, :medium))
+  def generate_medium(file, filename, id) do
+    path = file_path(id)
+    result = Path.join(path, size_name(filename, :medium))
+
     Mogrify.open(file)
       |> Mogrify.copy
       |> Mogrify.resize_to_fill("450x300")
@@ -66,12 +68,20 @@ defmodule Images.PropertyImage do
     result
   end
 
-  def generate_thumb(file, filename) do
-    result = Path.join(System.tmp_dir, size_name(filename, :medium))
+  def generate_thumb(file, filename, id) do
+    path = file_path(id)
+    result = Path.join(path, size_name(filename, :thumb))
+
     Mogrify.open(file)
       |> Mogrify.copy
       |> Mogrify.resize_to_limit("200x200")
       |> Mogrify.save(result)
     result
+  end
+
+  def file_path(id) do
+    path = "./file/#{id}"
+    File.mkdir(path)
+    path
   end
 end
