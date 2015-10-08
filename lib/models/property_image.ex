@@ -9,8 +9,7 @@ defmodule Images.PropertyImage do
 
   def main_query do
     from i in Images.PropertyImage,
-      select: i,
-      limit: 200
+      select: i
   end
 
   def all do
