@@ -3,5 +3,5 @@
   "httpotion": {:hex, :httpotion, "2.1.0"},
   "ibrowse": {:git, "git://github.com/cmullaparthi/ibrowse.git", "ea3305d21f37eced4fac290f64b068e56df7de80", [tag: "v4.1.2"]},
   "mariaex": {:hex, :mariaex, "0.4.3"},
-  "mogrify": {:git, "git://github.com/dabit/mogrify.git", "9e71f76c632fc2c150493c09b82ad4464d86fe33", [tag: "resize"]},
+  "mogrify": {:git, "https://github.com/dabit/mogrify.git", "32201ff5b7652fd8883c12f58bac1e8803214b1a", [tag: "elixir_1_1"]},
   "poolboy": {:hex, :poolboy, "1.5.1"}}
