@@ -21,7 +21,24 @@ defmodule Images do
   end
 
   def enqueue do
-    Enum.each Images.PropertyImage.all, fn(i) -> spawn(fn() -> pool_image(i) end) end
+    step = 10
+    Images.PropertyImage.paged(0, step)
+      |> Images.Repo.all
+      |> enqueue_batch(0, step)
+  end
+
+  def enqueue_batch(batch, offset, step) when length(batch) == 0 do
+    IO.puts "Done processing batches"
+  end
+
+  def enqueue_batch(batch, offset, step) do
+    Enum.each batch, fn(i) -> spawn(fn() -> pool_image(i) end) end
+    #Enum.each batch, fn(i) -> IO.puts(i.id) end
+
+    offset = offset + step
+    Images.PropertyImage.paged(offset, step)
+      |> Images.Repo.all
+      |> enqueue_batch(offset, step)
   end
 
   def pool_image(image) do

@@ -16,6 +16,12 @@ defmodule Images.PropertyImage do
     Images.Repo.all main_query
   end
 
+  def paged(offset, limit) do
+    from i in main_query,
+      limit: ^limit,
+      offset: ^offset
+  end
+
   def process(image) do
     medium   = image.file |> size_name(:medium) |> s3_url(image.id)
     response = medium |> HTTPotion.head
@@ -24,6 +30,8 @@ defmodule Images.PropertyImage do
       IO.puts "#{image.id} - #{image.file} Start"
       generate_versions(image.file, image.id)
       IO.puts "#{image.id} - #{image.file} End"
+    else
+      IO.puts "#{image.id} - #{image.file} OK"
     end
   end
 
