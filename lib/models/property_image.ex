@@ -66,29 +66,39 @@ defmodule Images.PropertyImage do
 
   def generate_medium(file, filename, id) do
     path = file_path(id)
-    result = Path.join(path, size_name(filename, :medium))
+    result = Path.join(System.tmp_dir, size_name(filename, :medium))
 
     Mogrify.open(file)
       |> Mogrify.copy
       |> Mogrify.resize_to_fill("450x300")
       |> Mogrify.save(result)
-    result
+
+    System.cmd("s3cmd", ["put", "--acl-public", result, s3_full_name(id, filename, :medium)]
   end
 
   def generate_thumb(file, filename, id) do
     path = file_path(id)
-    result = Path.join(path, size_name(filename, :thumb))
+    result = Path.join(System.tmp_dir, size_name(filename, :thumb))
 
     Mogrify.open(file)
       |> Mogrify.copy
       |> Mogrify.resize_to_limit("200x200")
       |> Mogrify.save(result)
-    result
+
+    System.cmd("s3cmd", ["put", "--acl-public", result, s3_full_name(id, filename, :thumb)]
   end
 
   def file_path(id) do
     path = "./file/#{id}"
     File.mkdir(path)
     path
+  end
+
+  def s3_full_name(id, filename, size) do
+    "#{s3_dest}/#{id}/#{size_name(filename, size)}"]
+  end
+
+  def s3_dest do
+    "s3://assets.stagingea.com/uploads/property_image/file/"
   end
 end
