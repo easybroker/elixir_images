@@ -40,7 +40,7 @@ defmodule Images.PropertyImage do
   end
 
   def s3_path do
-    "https://s3.amazonaws.com/assets.stagingea.com/uploads/property_image/file"
+    "https://s3.amazonaws.com/#{Application.get_env(:images, :s3_bucket)}/uploads/property_image/file"
   end
 
   def size_name(name, size) do
@@ -99,6 +99,6 @@ defmodule Images.PropertyImage do
   end
 
   def s3_dest do
-    "s3://assets.stagingea.com/uploads/property_image/file/"
+    "s3://#{Application.get_env(:images, :s3_bucket)}/uploads/property_image/file"
   end
 end
