@@ -1,21 +1,6 @@
 defmodule Images do
   def start(_type, _args) do
-    import Supervisor.Spec
-
-    poolboy_config = [
-      {:name, {:local, pool_name()}},
-      {:worker_module, Images.PropertyImageWorker},
-      {:size, 0},
-      {:max_overflow, 5}
-    ]
-
-    children = [
-      :poolboy.child_spec(pool_name(), poolboy_config, []),
-      worker(Images.Repo, [])
-    ]
-
-    opts = [strategy: :one_for_one]
-    supervisor = Supervisor.start_link(children, opts)
+    supervisor = Images.ImagesSupervisor.start_link
     enqueue
     supervisor
   end
@@ -28,11 +13,11 @@ defmodule Images do
       |> enqueue_batch(start, step)
   end
 
-  def enqueue_batch(batch, offset, step) when offset > 200000 do
+  def enqueue_batch(_, offset, _) when offset > 200000 do
     IO.puts "Done processing batches"
   end
 
-  def enqueue_batch(batch, offset, step) when length(batch) == 0 do
+  def enqueue_batch(batch, _, _) when length(batch) == 0 do
     IO.puts "Done processing batches"
   end
 
@@ -48,13 +33,9 @@ defmodule Images do
 
   def pool_image(image) do
     :poolboy.transaction(
-      pool_name(),
+      Images.ImagesSupervisor.pool_name,
       fn(pid) -> :gen_server.call(pid, image) end,
       :infinity
     )
-  end
-
-  def pool_name do
-    :property_images
   end
 end

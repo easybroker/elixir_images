@@ -73,7 +73,7 @@ defmodule Images.PropertyImage do
       |> Mogrify.resize_to_fill("450x300")
       |> Mogrify.save(result)
 
-    System.cmd("s3cmd", ["put", "--acl-public", result, s3_full_name(id, filename, :medium)]
+    System.cmd("s3cmd", ["put", "--acl-public", result, s3_full_name(id, filename, :medium)])
   end
 
   def generate_small(file, filename, id) do
@@ -85,7 +85,7 @@ defmodule Images.PropertyImage do
       |> Mogrify.resize_to_limit("150x100")
       |> Mogrify.save(result)
 
-    System.cmd("s3cmd", ["put", "--acl-public", result, s3_full_name(id, filename, :small)]
+    System.cmd("s3cmd", ["put", "--acl-public", result, s3_full_name(id, filename, :small)])
   end
 
   def file_path(id) do
@@ -95,7 +95,7 @@ defmodule Images.PropertyImage do
   end
 
   def s3_full_name(id, filename, size) do
-    "#{s3_dest}/#{id}/#{size_name(filename, size)}"]
+    "#{s3_dest}/#{id}/#{size_name(filename, size)}"
   end
 
   def s3_dest do
