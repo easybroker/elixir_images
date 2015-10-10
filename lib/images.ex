@@ -22,9 +22,14 @@ defmodule Images do
 
   def enqueue do
     step = 10
-    Images.PropertyImage.paged(0, step)
+    start = 0
+    Images.PropertyImage.paged(start, step)
       |> Images.Repo.all
-      |> enqueue_batch(0, step)
+      |> enqueue_batch(start, step)
+  end
+
+  def enqueue_batch(batch, offset, step) when offset > 200000 do
+    IO.puts "Done processing batches"
   end
 
   def enqueue_batch(batch, offset, step) when length(batch) == 0 do
