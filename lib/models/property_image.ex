@@ -23,7 +23,7 @@ defmodule Images.PropertyImage do
   end
 
   def process(image) do
-    medium   = image.file |> size_name(:medium) |> s3_url(image.id)
+    medium   = image.file |> size_name(:small) |> s3_url(image.id)
     response = medium |> HTTPotion.head
 
     unless response.status_code == 200 do
@@ -50,7 +50,7 @@ defmodule Images.PropertyImage do
   def generate_versions(filename, id) do
     file        = download_original(filename, id)
     generate_medium(file, filename, id)
-    generate_thumb(file, filename, id)
+    generate_small(file, filename, id)
   end
 
   def download_original(filename, id) do
@@ -76,16 +76,16 @@ defmodule Images.PropertyImage do
     System.cmd("s3cmd", ["put", "--acl-public", result, s3_full_name(id, filename, :medium)]
   end
 
-  def generate_thumb(file, filename, id) do
+  def generate_small(file, filename, id) do
     path = file_path(id)
-    result = Path.join(System.tmp_dir, size_name(filename, :thumb))
+    result = Path.join(System.tmp_dir, size_name(filename, :small))
 
     Mogrify.open(file)
       |> Mogrify.copy
-      |> Mogrify.resize_to_limit("200x200")
+      |> Mogrify.resize_to_limit("150x100")
       |> Mogrify.save(result)
 
-    System.cmd("s3cmd", ["put", "--acl-public", result, s3_full_name(id, filename, :thumb)]
+    System.cmd("s3cmd", ["put", "--acl-public", result, s3_full_name(id, filename, :small)]
   end
 
   def file_path(id) do
