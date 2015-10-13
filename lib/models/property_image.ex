@@ -28,8 +28,10 @@ defmodule Images.PropertyImage do
 
     unless response.status_code == 200 do
       IO.puts "#{image.id} - #{image.file} Start"
+      { _, start_seconds, start_micro } = :os.timestamp
       generate_versions(image.file, image.id)
-      IO.puts "#{image.id} - #{image.file} End"
+      { _, end_seconds, end_micro } = :os.timestamp
+      IO.puts "#{image.id} - #{image.file} End in #{end_seconds - start_seconds}.#{end_micro - start_micro}"
     else
       IO.puts "#{image.id} - #{image.file} OK"
     end
