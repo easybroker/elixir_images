@@ -10,7 +10,10 @@ config :images, Images.Repo,
   hostname: "localhost"
 
 config :images,
-  s3_bucket: "assets.stagingea.com"
+  s3_bucket: "assets.stagingea.com",
+  aws_access_key: "",
+  aws_secret_key: ""
+
 
 # This configuration is loaded before any dependency and is restricted
 # to this project. If another project depends on this project, this

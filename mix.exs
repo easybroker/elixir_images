@@ -16,7 +16,7 @@ defmodule Images.Mixfile do
   def application do
     [
       mod: {Images, []},
-      applications: [:logger, :mariaex, :ecto, :httpotion]
+      applications: [:logger, :mariaex, :ecto, :httpotion, :ssl, :erlcloud]
     ]
   end
 
@@ -35,7 +35,8 @@ defmodule Images.Mixfile do
       {:mariaex, "~> 0.4.2"},
       {:ibrowse, github: "cmullaparthi/ibrowse", tag: "v4.1.2"},
       {:httpotion, "~> 2.1.0"},
-      {:mogrify, github: "dabit/mogrify", tag: "elixir_1_1"}
+      {:mogrify, github: "dabit/mogrify", tag: "elixir_1_1"},
+      {:erlcloud, github: "gleber/erlcloud"}
     ]
   end
 end

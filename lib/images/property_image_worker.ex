@@ -6,6 +6,9 @@ defmodule Images.PropertyImageWorker do
   end
 
   def init(state) do
+    Application.get_env(:images, :aws_access_key)
+      |> to_char_list
+      |> :erlcloud_s3.configure(to_char_list(Application.get_env(:images, :aws_secret_key)))
     {:ok, state}
   end
 

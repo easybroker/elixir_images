@@ -23,7 +23,7 @@ defmodule Images.PropertyImage do
   end
 
   def process(image, index) do
-    medium   = image.file |> size_name(:small) |> s3_url(image.id)
+    medium   = image.file |> size_name(:smull) |> s3_url(image.id)
     response = medium |> HTTPotion.head
 
     unless response.status_code == 200 do
@@ -75,9 +75,16 @@ defmodule Images.PropertyImage do
       |> Mogrify.resize_to_fill("450x300")
       |> Mogrify.save(result)
 
+    {_, file} = File.read(result)
+
     s3_name = s3_full_name(id, filename, :medium)
-    {status, _} = System.cmd("s3cmd", ["-P", "put", result, s3_name])
-    IO.puts status
+      |> String.to_char_list
+
+    IO.puts s3_name
+
+    Application.get_env(:images, :s3_bucket)
+      |> String.to_char_list
+      |> :erlcloud_s3.put_object(s3_name, file, [], [{'x-amz-acl', 'public-read'}])
   end
 
   def generate_small(file, filename, id) do
@@ -89,9 +96,16 @@ defmodule Images.PropertyImage do
       |> Mogrify.resize_to_limit("150x100")
       |> Mogrify.save(result)
 
+    {_, file} = File.read(result)
+
     s3_name = s3_full_name(id, filename, :small)
-    {status, _} = System.cmd("s3cmd", ["-P", "put", result, s3_name])
-    IO.puts status
+      |> String.to_char_list
+
+    IO.puts s3_name
+
+    Application.get_env(:images, :s3_bucket)
+      |> String.to_char_list
+      |> :erlcloud_s3.put_object(s3_name, file, [], [{'x-amz-acl', 'public-read'}])
   end
 
   def file_path(id) do
@@ -105,6 +119,6 @@ defmodule Images.PropertyImage do
   end
 
   def s3_dest do
-    "s3://#{Application.get_env(:images, :s3_bucket)}/uploads/property_image/file"
+    "uploads/property_image/file"
   end
 end
