@@ -6,7 +6,7 @@ defmodule Images do
   end
 
   def enqueue do
-    step = 10
+    step = 1000
     start = 0
     Images.PropertyImage.paged(start, step)
       |> Images.Repo.all
