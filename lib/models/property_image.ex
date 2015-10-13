@@ -23,7 +23,7 @@ defmodule Images.PropertyImage do
   end
 
   def process(image, index) do
-    medium   = image.file |> size_name(:smull) |> s3_url(image.id)
+    medium   = image.file |> size_name(:small) |> s3_url(image.id)
     response = medium |> HTTPotion.head
 
     unless response.status_code == 200 do
