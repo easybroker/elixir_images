@@ -74,8 +74,7 @@ defmodule Images.PropertyImage do
       |> Mogrify.save(result)
 
     s3_name = s3_full_name(id, filename, :medium)
-    IO.puts s3_name
-    spawn(System.cmd("s3cmd", ["put", "--acl-public", result, s3_name]))
+    IO.puts System.cmd("s3cmd", ["-P", "put", result, s3_name]))
   end
 
   def generate_small(file, filename, id) do
@@ -88,8 +87,7 @@ defmodule Images.PropertyImage do
       |> Mogrify.save(result)
 
     s3_name = s3_full_name(id, filename, :small)
-    IO.puts s3_name
-    spawn(System.cmd("s3cmd", ["put", "--acl-public", result, s3_name]))
+    IO.puts System.cmd("s3cmd", ["-P", "put", result, s3_name])
   end
 
   def file_path(id) do
