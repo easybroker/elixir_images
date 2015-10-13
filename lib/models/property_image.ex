@@ -22,18 +22,18 @@ defmodule Images.PropertyImage do
       offset: ^offset
   end
 
-  def process(image) do
+  def process(image, index) do
     medium   = image.file |> size_name(:small) |> s3_url(image.id)
     response = medium |> HTTPotion.head
 
     unless response.status_code == 200 do
-      IO.puts "#{image.id} - #{image.file} Start"
+      IO.puts "#{index} - #{image.id} - #{image.file} Start"
       { _, start_seconds, start_micro } = :os.timestamp
       generate_versions(image.file, image.id)
       { _, end_seconds, end_micro } = :os.timestamp
-      IO.puts "#{image.id} - #{image.file} End in #{end_seconds - start_seconds}.#{end_micro - start_micro}"
+      IO.puts "#{index} - #{image.id} - #{image.file} End in #{end_seconds - start_seconds}.#{end_micro - start_micro}"
     else
-      IO.puts "#{image.id} - #{image.file} OK"
+      IO.puts "#{index} - #{image.id} - #{image.file} OK"
     end
   end
 

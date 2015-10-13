@@ -10,7 +10,8 @@ defmodule Images.PropertyImageWorker do
   end
 
   def handle_call(image, from, state) do
-    result = Images.PropertyImage.process(image)
+    {image_object, index} = image
+    result = Images.PropertyImage.process(image_object, index)
     {:reply, [result], state}
   end
 end

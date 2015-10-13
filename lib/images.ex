@@ -22,7 +22,9 @@ defmodule Images do
   end
 
   def enqueue_batch(batch, offset, step) do
-    Enum.each batch, fn(i) -> spawn(fn() -> pool_image(i) end) end
+    batch
+      |> Stream.with_index
+      |> Enum.each fn(r) -> spawn(fn() -> pool_image(r) end) end
     #Enum.each batch, fn(i) -> IO.puts(i.id) end
 
     offset = offset + step
